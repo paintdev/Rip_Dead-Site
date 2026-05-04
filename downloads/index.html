@@ -239,7 +239,7 @@ function render(){
     if((active==="all"||item.category===active)&&item.name.toLowerCase().includes(search)){
       grid.innerHTML+=`
         <div class="card">
-          ${i===0?`<div style="position:absolute;top:10px;right:10px;background:#a855f7;padding:4px 8px;border-radius:6px;font-size:12px;font-weight:bold;">NEW</div>`:""}
+          ${i===0?`<div style="position:absolute;top:10px;right:10px;background:#a855f7;padding:4px 8px;border-radius:6px;font-size:12px;font-weight:bold;"</div>`:""}
           <h3>${item.name}</h3>
           <div>${item.type} • ${item.size}</div>
           <a class="download" href="${item.file}" target="_blank">Download</a>
