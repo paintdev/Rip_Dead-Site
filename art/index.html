@@ -9,7 +9,7 @@
 
 <style>
 
-/* ================= VOID BACKGROUND ================= */
+/* VOIDUI CORE */
 
 body{
   margin:0;
@@ -17,66 +17,22 @@ body{
   color:#fff;
   min-height:100vh;
   background:#04040a;
-
-  opacity:0;
-  transform:translateY(60px);
-  transition:0.6s ease;
 }
-
-body.void-enter{
-  opacity:1;
-  transform:translateY(0);
-}
-
-body.void-exit{
-  opacity:0;
-  transform:translateY(80px);
-}
-
-/* cosmic void layers */
 
 body::before{
   content:"";
   position:fixed;
   inset:0;
-  z-index:-3;
-
-  background:
-    radial-gradient(circle at 50% 40%,
-      rgba(150,0,255,0.30),
-      rgba(0,0,0,0.85) 60%,
-      #000 100%);
-}
-
-body::after{
-  content:"";
-  position:fixed;
-  inset:0;
   z-index:-2;
-
-  background:
-    radial-gradient(circle at 25% 70%,
-      rgba(170,0,255,0.18),
-      transparent 60%),
-    radial-gradient(circle at 75% 30%,
-      rgba(0,255,200,0.12),
-      transparent 55%);
-
-  filter:blur(50px);
+  background:radial-gradient(circle at 50% 40%,rgba(150,0,255,0.35),#000);
 }
 
-/* ================= HEADER ================= */
+/* HEADER */
 
 .top{
   display:flex;
   justify-content:space-between;
-  align-items:center;
   padding:20px;
-}
-
-.title{
-  font-size:24px;
-  font-weight:bold;
 }
 
 .back{
@@ -86,284 +42,90 @@ body::after{
   color:#000;
   text-decoration:none;
   font-weight:bold;
-  transition:0.25s;
 }
 
-.back:hover{
-  background:#c084fc;
-  box-shadow:0 0 15px rgba(168,85,247,0.6);
-}
-
-/* ================= SEARCH ================= */
-
-.search{
-  display:flex;
-  justify-content:center;
-  margin:10px 0;
-}
-
-.search input{
-  width:320px;
-  padding:12px;
-  border-radius:10px;
-  border:none;
-  outline:none;
-}
-
-/* ================= TAGS ================= */
-
-.tags{
-  display:flex;
-  justify-content:center;
-  flex-wrap:wrap;
-  gap:10px;
-  margin-bottom:20px;
-}
-
-.tag-btn{
-  padding:8px 12px;
-  border-radius:20px;
-  background:rgba(255,255,255,0.08);
-  cursor:pointer;
-  transition:0.2s;
-}
-
-.tag-btn:hover{
-  background:rgba(168,85,247,0.25);
-  box-shadow:0 0 10px rgba(168,85,247,0.3);
-}
-
-/* ================= GRID ================= */
+/* GRID */
 
 .grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-  gap:20px;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:15px;
   padding:20px;
 }
 
 .card{
   background:rgba(20,20,20,0.55);
-  backdrop-filter:blur(12px);
   border-radius:14px;
-  overflow:hidden;
-  border:1px solid rgba(255,255,255,0.06);
-  transition:0.3s;
+  padding:10px;
 }
 
-.card:hover{
-  transform:translateY(-6px);
-  box-shadow:0 0 25px rgba(168,85,247,0.25);
-}
-
-/* ✅ FIXED SQUARE IMAGES */
 .card img{
   width:100%;
-  aspect-ratio:1 / 1;
+  aspect-ratio:1/1;
   object-fit:cover;
-  cursor:pointer;
-  display:block;
+  border-radius:10px;
 }
 
-/* info */
-.info{
-  padding:12px;
+/* FOOTER */
+
+footer{
+  text-align:center;
+  padding:25px;
+  margin-top:80px;
+  background:rgba(0,0,0,0.35);
+  backdrop-filter:blur(12px);
+  border-top:1px solid rgba(255,255,255,0.05);
   font-size:14px;
+  opacity:0.85;
 }
 
-/* download */
-.download{
-  display:inline-block;
-  margin-top:10px;
-  padding:10px;
-  background:#a855f7;
-  color:#000;
-  font-weight:bold;
-  border-radius:8px;
+footer a{
+  color:#a855f7;
   text-decoration:none;
-  transition:0.2s;
+  font-weight:bold;
 }
-
-.download:hover{
-  background:#c084fc;
-  box-shadow:0 0 15px rgba(168,85,247,0.6);
-}
-
-/* ================= MODAL ================= */
-
-#modal{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.85);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:9999;
-}
-
-#modal img{
-  max-width:85%;
-  max-height:85%;
-  border-radius:12px;
-}
-
-/* hidden */
-.hidden{display:none;}
 
 </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
 <div class="top">
-  <div class="title">🎨 Rip_Dead Art</div>
+  <h2>🎨 Art</h2>
   <a class="back" href="/">← Back Home</a>
 </div>
 
-<!-- SEARCH -->
-<div class="search">
-  <input id="search" placeholder="Search art...">
-</div>
-
-<!-- TAGS -->
-<div class="tags" id="tags"></div>
-
-<!-- GRID -->
 <div class="grid" id="grid"></div>
 
-<!-- MODAL -->
-<div id="modal" onclick="closeModal()">
-  <img id="modalImg">
-</div>
+<footer>
+  © 2026 Rip_Dead Studios™ —
+  <a href="https://github.com/ripdead32/Rip_Dead-Site" target="_blank">
+    <u><strong>This project is open source</strong></u>
+  </a>
+</footer>
 
 <script>
 
-let data = [];
-let activeTag = "all";
-
-/* ===== ENTER ANIMATION ===== */
-window.addEventListener("DOMContentLoaded", ()=>{
-  document.body.classList.add("void-enter");
-});
-
-/* ===== EXIT ANIMATION (GLOBAL NAV) ===== */
-document.querySelectorAll("a").forEach(a=>{
-  a.addEventListener("click",(e)=>{
-
-    if(a.target === "_blank") return;
-
-    e.preventDefault();
-
-    document.body.classList.remove("void-enter");
-    document.body.classList.add("void-exit");
-
-    setTimeout(()=>{
-      window.location.href = a.href;
-    }, 500);
-
-  });
-});
-
-/* ===== LOAD JSON SAFELY ===== */
-async function loadArt(){
-  try{
-    const res = await fetch("./art.json");
-    data = await res.json();
-
-    renderTags();
-    render();
-
-  } catch(err){
-    console.error(err);
-    document.getElementById("grid").innerHTML =
-      "<p style='text-align:center'>Failed to load art.json</p>";
+const art=[
+  {
+    name:"Rip_Dead FNF",
+    file:"/images/rip-fnf.png",
+    size:"728 KB",
+    tags:["Funkin"]
   }
-}
+];
 
-loadArt();
+const grid=document.getElementById("grid");
 
-/* ===== TAGS ===== */
-function renderTags(){
-  const set = new Set();
-
-  data.forEach(i=>{
-    (i.tags || []).forEach(t=>set.add(t));
-  });
-
-  const tags = document.getElementById("tags");
-
-  tags.innerHTML = `<div class="tag-btn" onclick="setTag('all')">All</div>`;
-
-  set.forEach(tag=>{
-    tags.innerHTML += `
-      <div class="tag-btn" onclick="setTag('${tag}')">${tag}</div>
-    `;
-  });
-}
-
-function setTag(tag){
-  activeTag = tag;
-  render();
-}
-
-/* ===== GRID RENDER ===== */
-function render(){
-
-  const grid = document.getElementById("grid");
-  const search = document.getElementById("search").value.toLowerCase();
-
-  grid.innerHTML = "";
-
-  data.forEach(item=>{
-
-    const tags = item.tags || [];
-
-    const matchTag =
-      activeTag === "all" || tags.includes(activeTag);
-
-    const matchSearch =
-      item.name.toLowerCase().includes(search) ||
-      tags.join(" ").toLowerCase().includes(search);
-
-    if(matchTag && matchSearch){
-
-      grid.innerHTML += `
-        <div class="card">
-          <img src="${item.file}" onclick="openModal('${item.file}')">
-
-          <div class="info">
-            <b>${item.name}</b><br>
-            Size: ${item.size}<br>
-            Publisher: ${item.publisher}<br>
-            Tags: ${tags.join(", ")}<br>
-
-            <a class="download" href="${item.file}" download>Download</a>
-          </div>
-        </div>
-      `;
-    }
-  });
-}
-
-/* ===== SEARCH ===== */
-document.getElementById("search").addEventListener("input", render);
-
-/* ===== MODAL ===== */
-function openModal(src){
-  document.getElementById("modal").style.display="flex";
-  document.getElementById("modalImg").src=src;
-}
-
-function closeModal(){
-  document.getElementById("modal").style.display="none";
-}
-
-/* ===== CONSOLE WARNING ===== */
-console.log(
-  "%cSTOP! DO NOT INSERT ANYTHING HERE! IT COULD BREAK THE SITE!",
-  "color:#fff;background:#a855f7;padding:6px;border-radius:6px;"
-);
+art.forEach(a=>{
+  grid.innerHTML+=`
+    <div class="card">
+      <img src="${a.file}">
+      <h3>${a.name}</h3>
+      <div>${a.size}</div>
+      <div>${a.tags.join(", ")}</div>
+    </div>`;
+});
 
 </script>
 

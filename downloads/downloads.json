@@ -1,0 +1,23 @@
+[
+  {
+    "name": "Kahoot App v1.0",
+    "type": "Installer",
+    "size": "30 MB",
+    "category": "apps",
+    "file": "https://github.com/ripdead32/Kahoot-App/releases/download/V1.0/Kahoot-App_Setup-v1.0.exe"
+  },
+  {
+    "name": "Kahoot App v1.2",
+    "type": "Installer",
+    "size": "32 MB",
+    "category": "apps",
+    "file": "https://github.com/ripdead32/Kahoot-App/releases/download/V1.2/Kahoot-App_Setup-v1.2.exe"
+  },
+  {
+    "name": "FNF Tutorial Remastered",
+    "type": "Mod ZIP",
+    "size": "120 MB",
+    "category": "mods",
+    "file": "https://cdn-ripdead.kozow.com/apis/libraries/zip/tut-rem-v1.zip"
+  }
+]

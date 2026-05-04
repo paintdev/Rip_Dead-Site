@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Rip_Dead Site - Downloads</title>
+<link rel="icon" href="/favicon.ico">
+
+<style>
+
+/* ================= VOIDUI ================= */
+
+body{
+  margin:0;
+  font-family:'Segoe UI',sans-serif;
+  color:#fff;
+  min-height:100vh;
+  background:#04040a;
+
+  opacity:0;
+  transform:translateY(60px);
+  transition:0.6s ease;
+}
+
+body.void-enter{opacity:1;transform:translateY(0);}
+body.void-exit{opacity:0;transform:translateY(80px);}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-3;
+  background:
+    radial-gradient(circle at 50% 40%,rgba(150,0,255,0.30),rgba(0,0,0,0.85) 60%,#000 100%);
+}
+
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-2;
+  background:
+    radial-gradient(circle at 25% 70%,rgba(170,0,255,0.18),transparent 60%),
+    radial-gradient(circle at 75% 30%,rgba(0,255,200,0.12),transparent 55%);
+  filter:blur(50px);
+}
+
+/* HEADER */
+
+.top{
+  display:flex;
+  justify-content:space-between;
+  padding:20px;
+}
+
+.title{font-size:24px;font-weight:bold;}
+
+.back{
+  padding:10px 14px;
+  border-radius:10px;
+  background:#a855f7;
+  color:#000;
+  text-decoration:none;
+  font-weight:bold;
+}
+
+.back:hover{
+  background:#c084fc;
+  box-shadow:0 0 15px rgba(168,85,247,0.6);
+}
+
+/* SEARCH */
+
+.search{
+  display:flex;
+  justify-content:center;
+  margin:10px 0;
+}
+
+.search input{
+  width:320px;
+  padding:12px;
+  border-radius:10px;
+  border:none;
+}
+
+/* FILTERS */
+
+.filters{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:10px;
+}
+
+.filter-btn{
+  padding:8px 12px;
+  border-radius:20px;
+  background:rgba(255,255,255,0.08);
+  cursor:pointer;
+}
+
+/* GRID */
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:20px;
+  padding:20px;
+}
+
+/* CARD */
+
+.card{
+  position:relative;
+  background:rgba(20,20,20,0.55);
+  backdrop-filter:blur(12px);
+  border-radius:14px;
+  padding:18px;
+}
+
+.card:hover{
+  transform:translateY(-6px);
+  box-shadow:0 0 25px rgba(168,85,247,0.25);
+}
+
+/* DOWNLOAD */
+
+.download{
+  display:block;
+  margin-top:12px;
+  padding:12px;
+  text-align:center;
+  background:#a855f7;
+  color:#000;
+  font-weight:bold;
+  border-radius:10px;
+  text-decoration:none;
+}
+
+.download:hover{
+  background:#c084fc;
+  box-shadow:0 0 18px rgba(168,85,247,0.7);
+}
+
+/* FOOTER */
+
+footer{
+  text-align:center;
+  padding:25px;
+  margin-top:80px;
+  background:rgba(0,0,0,0.35);
+  backdrop-filter:blur(12px);
+  border-top:1px solid rgba(255,255,255,0.05);
+  font-size:14px;
+  opacity:0.85;
+}
+
+footer a{
+  color:#a855f7;
+  text-decoration:none;
+  font-weight:bold;
+}
+
+footer a:hover{
+  color:#c084fc;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="top">
+  <div class="title">📦 Downloads Engine v3</div>
+  <a class="back" href="/">← Back Home</a>
+</div>
+
+<div class="search">
+  <input id="search" placeholder="Search downloads...">
+</div>
+
+<div class="filters" id="filters"></div>
+
+<div class="grid" id="grid"></div>
+
+<footer>
+  © 2026 Rip_Dead Studios™ —
+  <a href="https://github.com/ripdead32/Rip_Dead-Site" target="_blank">
+    <u><strong>This project is open source</strong></u>
+  </a>
+</footer>
+
+<script>
+
+/* JS unchanged from v3 system */
+
+let data=[];
+let active="all";
+
+window.addEventListener("DOMContentLoaded",()=>{
+  document.body.classList.add("void-enter");
+  load();
+});
+
+async function load(){
+  const res=await fetch("./downloads.json?cache="+Date.now());
+  data=await res.json();
+  renderFilters();
+  render();
+}
+
+setInterval(load,6000);
+
+function renderFilters(){
+  const set=new Set();
+  data.forEach(i=>set.add(i.category));
+
+  const box=document.getElementById("filters");
+
+  box.innerHTML=`<div class="filter-btn" onclick="setFilter('all')">All</div>`;
+
+  set.forEach(c=>{
+    box.innerHTML+=`<div class="filter-btn" onclick="setFilter('${c}')">${c}</div>`;
+  });
+}
+
+function setFilter(c){active=c;render();}
+
+function render(){
+  const grid=document.getElementById("grid");
+  const search=document.getElementById("search").value.toLowerCase();
+
+  grid.innerHTML="";
+
+  data.forEach((item,i)=>{
+    if((active==="all"||item.category===active)&&item.name.toLowerCase().includes(search)){
+      grid.innerHTML+=`
+        <div class="card">
+          ${i===0?`<div style="position:absolute;top:10px;right:10px;background:#a855f7;padding:4px 8px;border-radius:6px;font-size:12px;font-weight:bold;">NEW</div>`:""}
+          <h3>${item.name}</h3>
+          <div>${item.type} • ${item.size}</div>
+          <a class="download" href="${item.file}" target="_blank">Download</a>
+        </div>`;
+    }
+  });
+}
+
+document.getElementById("search").addEventListener("input",render);
+
+</script>
+
+</body>
+</html>
