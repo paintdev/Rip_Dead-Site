@@ -5,21 +5,32 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Rip_Dead Site</title>
-<link rel="icon" href="favicon.ico">
+<link rel="icon" href="/favicon.ico">
 
 <style>
 
-/* =========================================================
-   VOIDUI BASE
-========================================================= */
+/* ================= VOIDUI TRANSITIONS ================= */
 
 body{
   margin:0;
   font-family:'Segoe UI',sans-serif;
   color:#fff;
   min-height:100vh;
-  overflow-x:hidden;
   background:#04040a;
+
+  opacity:0;
+  transform:translateY(60px);
+  transition:0.6s ease;
+}
+
+body.void-enter{
+  opacity:1;
+  transform:translateY(0);
+}
+
+body.void-exit{
+  opacity:0;
+  transform:translateY(80px);
 }
 
 /* ================= VOID BACKGROUND ================= */
@@ -28,55 +39,23 @@ body::before{
   content:"";
   position:fixed;
   inset:0;
-  z-index:-3;
-
+  z-index:-2;
   background:
-    radial-gradient(circle at 50% 40%,
-      rgba(150, 0, 255, 0.30) 0%,
-      rgba(10, 0, 25, 0.85) 55%,
-      #000 100%);
+    radial-gradient(circle at 50% 40%,rgba(150,0,255,0.30),rgba(0,0,0,0.9),#000);
 }
 
 body::after{
   content:"";
   position:fixed;
   inset:0;
-  z-index:-2;
-
-  background:
-    radial-gradient(circle at 20% 70%,
-      rgba(170, 0, 255, 0.18),
-      transparent 60%),
-    radial-gradient(circle at 80% 30%,
-      rgba(120, 0, 200, 0.15),
-      transparent 55%);
-
-  filter:blur(50px);
-  opacity:0.9;
-}
-
-.void-glow{
-  position:fixed;
-  left:0;
-  bottom:0;
-  width:100%;
-  height:70vh;
   z-index:-1;
-  pointer-events:none;
-
-  background:linear-gradient(
-    to top,
-    rgba(0, 255, 200, 0.18),
-    transparent
-  );
-
-  filter:blur(90px);
-  opacity:0.8;
+  background:
+    radial-gradient(circle at 20% 60%,rgba(168,85,247,0.2),transparent 60%),
+    radial-gradient(circle at 80% 30%,rgba(0,255,200,0.1),transparent 60%);
+  filter:blur(50px);
 }
 
-/* =========================================================
-   NAVBAR (UPDATED - SUPPORT REMOVED)
-========================================================= */
+/* ================= NAVBAR v2 ================= */
 
 .navbar{
   position:sticky;
@@ -93,6 +72,12 @@ body::after{
   backdrop-filter:blur(14px);
 
   border-bottom:1px solid rgba(255,255,255,0.05);
+
+  transition:0.3s ease;
+}
+
+.navbar.hidden{
+  transform:translateY(-100%);
 }
 
 .nav-logo{
@@ -100,57 +85,66 @@ body::after{
   font-size:18px;
   color:#fff;
   text-decoration:none;
-  letter-spacing:0.5px;
 }
 
 .nav-links{
   display:flex;
-  gap:18px;
+  gap:8px;
 }
 
 .nav-links a{
+  position:relative;
+
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:10px 14px;
+  border-radius:10px;
+
   color:#fff;
   text-decoration:none;
   font-weight:500;
+
   transition:0.25s;
+  overflow:hidden;
 }
 
 .nav-links a:hover{
+  background:rgba(168,85,247,0.15);
   color:#c084fc;
-  text-shadow:0 0 10px rgba(168,85,247,0.6);
 }
 
-/* =========================================================
-   TRANSITIONS
-========================================================= */
-
-.void-enter{
-  opacity:0;
-  transform:translateY(70px);
-  animation:voidIn 0.75s ease forwards;
+.nav-links a.active{
+  background:rgba(168,85,247,0.25);
+  box-shadow:0 0 12px rgba(168,85,247,0.4);
 }
 
-@keyframes voidIn{
-  to{
-    opacity:1;
-    transform:translateY(0);
+/* underline glow */
+.nav-links a::after{
+  content:"";
+  position:absolute;
+  bottom:4px;
+  left:50%;
+  width:0%;
+  height:2px;
+  background:#a855f7;
+  transition:0.3s ease;
+  transform:translateX(-50%);
+}
+
+.nav-links a:hover::after{
+  width:70%;
+}
+
+@media(max-width:700px){
+  .nav-links{
+    flex-wrap:wrap;
+    justify-content:center;
   }
 }
 
-.void-exit{
-  animation:voidOut 0.55s ease forwards;
-}
-
-@keyframes voidOut{
-  to{
-    opacity:0;
-    transform:translateY(90px);
-  }
-}
-
-/* =========================================================
-   HERO
-========================================================= */
+/* ================= HERO ================= */
 
 .hero{
   text-align:center;
@@ -167,9 +161,7 @@ body::after{
   margin-top:10px;
 }
 
-/* =========================================================
-   CARD SYSTEM
-========================================================= */
+/* ================= SOCIAL CARDS ================= */
 
 .container{
   display:flex;
@@ -197,10 +189,6 @@ body::after{
   box-shadow:0 0 35px rgba(168,85,247,0.25);
 }
 
-/* =========================================================
-   BUTTONS
-========================================================= */
-
 .buttons{
   display:flex;
   flex-direction:column;
@@ -222,13 +210,10 @@ body::after{
 
 .btn:hover{
   background:#c084fc;
-  transform:scale(1.05);
   box-shadow:0 0 18px rgba(168,85,247,0.6);
 }
 
-/* =========================================================
-   FOOTER
-========================================================= */
+/* ================= FOOTER ================= */
 
 footer{
   text-align:center;
@@ -244,26 +229,14 @@ footer{
   opacity:0.85;
 }
 
-.open-source{
+footer a{
   color:#a855f7;
   text-decoration:none;
   font-weight:bold;
 }
 
-.open-source:hover{
+footer a:hover{
   color:#c084fc;
-  text-shadow:0 0 14px #a855f7;
-}
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-@media(max-width:768px){
-  .navbar{
-    flex-direction:column;
-    gap:10px;
-  }
 }
 
 </style>
@@ -271,29 +244,27 @@ footer{
 
 <body>
 
-<div class="void-glow"></div>
-
-<!-- NAVBAR -->
-<div class="navbar">
+<!-- ================= NAVBAR ================= -->
+<div class="navbar" id="navbar">
 
   <a class="nav-logo" href="/">Rip_Dead Site</a>
 
   <div class="nav-links">
-    <a href="/">Home</a>
-    <a href="/art/">Art</a>
-    <a href="/downloads/">Downloads</a>
-    <a href="/blogs/">Blogs</a>
+    <a href="/" data-page="home">Home</a>
+    <a href="/art/" data-page="art">Art</a>
+    <a href="/downloads/" data-page="downloads">Downloads</a>
+    <a href="/blogs/" data-page="blogs">Blogs</a>
   </div>
 
 </div>
 
-<!-- HERO -->
+<!-- ================= HERO ================= -->
 <div class="hero">
   <h1>Welcome to Rip_Dead Site</h1>
   <p>Explore the vast creations of Rip_Dead and his Socials!</p>
 </div>
 
-<!-- SOCIAL CARD -->
+<!-- ================= SOCIALS ================= -->
 <div class="container">
   <div class="card">
 
@@ -308,10 +279,10 @@ footer{
   </div>
 </div>
 
-<!-- FOOTER -->
+<!-- ================= FOOTER ================= -->
 <footer>
-  © 2026 Rip_Dead Studios™ — 
-  <a class="open-source" href="https://github.com/ripdead32/Rip_Dead-Site" target="_blank">
+  © 2026 Rip_Dead Studios™ —
+  <a href="https://github.com/ripdead32/Rip_Dead-Site" target="_blank">
     <u><strong>This project is open source</strong></u>
   </a>
 </footer>
@@ -319,31 +290,60 @@ footer{
 <script>
 
 /* ENTER */
-window.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("DOMContentLoaded",()=>{
   document.body.classList.add("void-enter");
+  setActiveNav();
 });
 
-/* PAGE TRANSITION */
-document.addEventListener("click", (e) => {
-  const link = e.target.closest("a");
+/* EXIT TRANSITIONS */
+document.querySelectorAll("a").forEach(a=>{
+  a.addEventListener("click",(e)=>{
 
-  if(!link) return;
-  if(link.target === "_blank") return;
+    if(a.target==="_blank") return;
 
-  e.preventDefault();
+    e.preventDefault();
 
-  document.body.classList.remove("void-enter");
-  document.body.classList.add("void-exit");
+    document.body.classList.add("void-exit");
 
-  setTimeout(() => {
-    window.location.href = link.href;
-  }, 550);
+    setTimeout(()=>{
+      window.location=a.href;
+    },500);
+
+  });
+});
+
+/* ACTIVE NAV DETECTION */
+function setActiveNav(){
+  const path = window.location.pathname;
+
+  document.querySelectorAll(".nav-links a").forEach(a=>{
+    if(path === "/" && a.dataset.page === "home") a.classList.add("active");
+    if(path.includes("/art") && a.dataset.page === "art") a.classList.add("active");
+    if(path.includes("/downloads") && a.dataset.page === "downloads") a.classList.add("active");
+    if(path.includes("/blogs") && a.dataset.page === "blogs") a.classList.add("active");
+  });
+}
+
+/* SCROLL HIDE NAVBAR */
+let lastScroll = 0;
+const navbar = document.getElementById("navbar");
+
+window.addEventListener("scroll",()=>{
+  const current = window.pageYOffset;
+
+  if(current > lastScroll && current > 80){
+    navbar.classList.add("hidden");
+  } else {
+    navbar.classList.remove("hidden");
+  }
+
+  lastScroll = current;
 });
 
 /* CONSOLE WARNING */
 console.log(
   "%cSTOP! DO NOT INSERT ANYTHING HERE! IT COULD BREAK THE SITE!",
-  "color:#fff;background:#a855f7;padding:6px;border-radius:6px;font-size:14px;"
+  "color:#fff;background:#a855f7;padding:6px;border-radius:6px;"
 );
 
 </script>
