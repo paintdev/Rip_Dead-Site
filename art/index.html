@@ -17,7 +17,23 @@ body{
   color:#fff;
   min-height:100vh;
   background:#04040a;
+
+  opacity:0;
+  transform:translateY(60px);
+  transition:0.6s ease;
 }
+
+body.void-enter{
+  opacity:1;
+  transform:translateY(0);
+}
+
+body.void-exit{
+  opacity:0;
+  transform:translateY(80px);
+}
+
+/* cosmic void layers */
 
 body::before{
   content:"";
@@ -140,17 +156,22 @@ body::after{
   box-shadow:0 0 25px rgba(168,85,247,0.25);
 }
 
+/* ✅ FIXED SQUARE IMAGES */
 .card img{
   width:100%;
-  height:180px;
+  aspect-ratio:1 / 1;
   object-fit:cover;
   cursor:pointer;
+  display:block;
 }
 
+/* info */
 .info{
   padding:12px;
+  font-size:14px;
 }
 
+/* download */
 .download{
   display:inline-block;
   margin-top:10px;
@@ -160,6 +181,7 @@ body::after{
   font-weight:bold;
   border-radius:8px;
   text-decoration:none;
+  transition:0.2s;
 }
 
 .download:hover{
@@ -220,7 +242,30 @@ body::after{
 let data = [];
 let activeTag = "all";
 
-/* LOAD JSON (FIXED FOR GITHUB PAGES) */
+/* ===== ENTER ANIMATION ===== */
+window.addEventListener("DOMContentLoaded", ()=>{
+  document.body.classList.add("void-enter");
+});
+
+/* ===== EXIT ANIMATION (GLOBAL NAV) ===== */
+document.querySelectorAll("a").forEach(a=>{
+  a.addEventListener("click",(e)=>{
+
+    if(a.target === "_blank") return;
+
+    e.preventDefault();
+
+    document.body.classList.remove("void-enter");
+    document.body.classList.add("void-exit");
+
+    setTimeout(()=>{
+      window.location.href = a.href;
+    }, 500);
+
+  });
+});
+
+/* ===== LOAD JSON SAFELY ===== */
 async function loadArt(){
   try{
     const res = await fetch("./art.json");
@@ -230,7 +275,7 @@ async function loadArt(){
     render();
 
   } catch(err){
-    console.error("Failed to load art.json", err);
+    console.error(err);
     document.getElementById("grid").innerHTML =
       "<p style='text-align:center'>Failed to load art.json</p>";
   }
@@ -238,7 +283,7 @@ async function loadArt(){
 
 loadArt();
 
-/* TAGS */
+/* ===== TAGS ===== */
 function renderTags(){
   const set = new Set();
 
@@ -262,7 +307,7 @@ function setTag(tag){
   render();
 }
 
-/* RENDER GRID */
+/* ===== GRID RENDER ===== */
 function render(){
 
   const grid = document.getElementById("grid");
@@ -301,10 +346,10 @@ function render(){
   });
 }
 
-/* SEARCH */
+/* ===== SEARCH ===== */
 document.getElementById("search").addEventListener("input", render);
 
-/* MODAL */
+/* ===== MODAL ===== */
 function openModal(src){
   document.getElementById("modal").style.display="flex";
   document.getElementById("modalImg").src=src;
@@ -314,7 +359,7 @@ function closeModal(){
   document.getElementById("modal").style.display="none";
 }
 
-/* CONSOLE WARNING */
+/* ===== CONSOLE WARNING ===== */
 console.log(
   "%cSTOP! DO NOT INSERT ANYTHING HERE! IT COULD BREAK THE SITE!",
   "color:#fff;background:#a855f7;padding:6px;border-radius:6px;"
